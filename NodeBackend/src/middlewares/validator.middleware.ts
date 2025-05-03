@@ -11,11 +11,12 @@ export function validationMiddleware<T>(
     const dto = plainToInstance(type, req.body);
     const errors = await validate(dto, { skipMissingProperties });
     if (errors.length > 0) {
-      return ServerResponse.error(
+      ServerResponse.error(
         res,
         Object.values(errors[0]?.constraints as {})[0] as string
       );
     } else {
+      req.body = dto;
       next();
     }
   };
